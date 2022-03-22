@@ -59,11 +59,16 @@ def getNums(inp):
     Extract number(s) from user input
     """
     inp = getInput(inp)
-    digits = [int(x) for x in re.findall(r'\d+', inp)]
+    digits = re.findall(r'[+-]*\d+', inp)
     if len(digits) == 0:
         return []
 
-    return [digits[0], digits[-1]]
+    nums = [int(x) for x in digits if '-' not in x and '+' not in x]
+    introns = [int(x) for x in digits if '-' in x or '+' in x]
+    if len(introns)==0:
+        introns = [0 for x in nums]
+
+    return nums, introns
 
 
 def xcgConvert(inp):
@@ -72,13 +77,13 @@ def xcgConvert(inp):
 
     Returns dict with each set of numbers
     """
-    # figure out if input is exon, cds or genomic reference
     ref = getRef(inp)
-    nums = getNums(inp)
+    nums, introns = getNums(inp)
+    print(introns)
 
     dicts = []
-    for x in nums:
-        dicts += [convert(x, ref=ref)]
+    for x in list(zip(nums, introns)):
+        dicts += [convert(x[0], intron=x[1], ref=ref)]
 
     res = {x: [] for x in dicts[0].keys()}
     for d in dicts:
