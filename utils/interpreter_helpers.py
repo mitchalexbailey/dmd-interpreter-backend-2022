@@ -9,9 +9,12 @@ file.close()
 
 conversion_dicts = {
     'exon': {x[0]: dict(zip(header, x)) for x in rows},
-    'nc_000023.11': {range(x[2], x[1]+1): dict(zip(header, x)) for x in rows},
-    'nc_000023.10': {range(x[4], x[3]+1): dict(zip(header, x)) for x in rows},
-    'nm_004006.2': {range(x[5], x[6]+1): dict(zip(header, x)) for x in rows}
+    'nc_000023.11': {range(x[2], x[1] + 1):
+                     dict(zip(header, x)) for x in rows},
+    'nc_000023.10': {range(x[4], x[3] + 1):
+                     dict(zip(header, x)) for x in rows},
+    'nm_004006.2': {range(x[5], x[6] + 1):
+                    dict(zip(header, x)) for x in rows}
 }
 
 
@@ -25,13 +28,13 @@ def get_closest(num):
         else:
             flat_lst += [x]
 
-    diffs = [x-num for x in flat_lst]
+    diffs = [x - num for x in flat_lst]
     abss = [abs(x) for x in diffs]
     min_abs = min(abss)
     ind = abss.index(min_abs)
     intron = diffs[ind]
     num = flat_lst[ind]
-    key = list(conversion_dicts['nc_000023.11'])[int(ind/2)]
+    key = list(conversion_dicts['nc_000023.11'])[int(ind / 2)]
 
     return num, intron, key
 

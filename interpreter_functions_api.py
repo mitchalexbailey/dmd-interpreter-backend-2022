@@ -65,7 +65,7 @@ def getNums(inp):
 
     nums = [int(x) for x in digits if '-' not in x and '+' not in x]
     introns = [int(x) for x in digits if '-' in x or '+' in x]
-    if len(introns)==0:
+    if len(introns) == 0:
         introns = [0 for x in nums]
 
     return nums, introns
@@ -79,7 +79,6 @@ def xcgConvert(inp):
     """
     ref = getRef(inp)
     nums, introns = getNums(inp)
-    print(introns)
 
     dicts = []
     for x in list(zip(nums, introns)):
