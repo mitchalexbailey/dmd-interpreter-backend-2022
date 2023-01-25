@@ -63,8 +63,13 @@ def getNums(inp):
     if len(digits) == 0:
         return []
 
-    nums = [int(x) for x in digits if '-' not in x and '+' not in x]
-    introns = [int(x) for x in digits if '-' in x or '+' in x]
+    if exInput(inp):
+        nums = [int(x.replace('-', '')) for x in digits]
+        introns = []
+    else:
+        nums = [int(x) for x in digits if '-' not in x and '+' not in x]
+        introns = [int(x) for x in digits if '-' in x or '+' in x]
+
     if len(introns) == 0:
         introns = [0 for x in nums]
 
@@ -82,7 +87,11 @@ def xcgConvert(inp):
 
     dicts = []
     for x in list(zip(nums, introns)):
-        dicts += [convert(x[0], intron=x[1], ref=ref)]
+        if ref != 'exon':
+            dicts += [convert(x[0], intron=x[1], ref=ref)]
+        else:
+            dicts += [convert(x[0], intron=x[1], ref=ref, cds='start')]
+            dicts += [convert(x[0], intron=x[1], ref=ref, cds='end')]
 
     res = {x: [] for x in dicts[0].keys()}
     for d in dicts:

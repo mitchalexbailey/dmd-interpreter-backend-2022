@@ -39,20 +39,19 @@ def get_closest(num):
     return num, intron, key
 
 
-def convert(num, intron, ref):
+def convert(num, intron, ref, cds='start'):
     if ref == 'exon':
-        left = convert(conversion_dicts['exon'].get(num, {}).get('cds_start'),
+        return convert(conversion_dicts['exon'].get(num, {}).get(f'{cds}_cds'),
+                       intron=intron,
                        ref='nm_004006.2')
-        right = convert(conversion_dicts['exon'].get(num, {}).get('cds_end'),
-                        ref='nm_004006.2')
 
-    found = False
+    border = False
     for key, value in conversion_dicts[ref].items():
         if num in key:
-            found = True
+            border = True
             break
 
-    if not found:
+    if not border:
         num, intron, key = get_closest(num)
 
     exon = conversion_dicts[ref][key]['exon']
@@ -70,6 +69,7 @@ def convert(num, intron, ref):
         'nm_004006.2': cds,
         'intron': intron,
         'exon': exon,
+        'exon_border': border,
         'nc_000023.11': hg38,
         'nc_000023.10': hg19,
     }
